@@ -8,5 +8,8 @@
                 exit;
             }
         }
+        public static function correo(string $correo=''){
+            return filter_var($correo, FILTER_VALIDATE_EMAIL);
+        }
     }
 ?>

@@ -17,5 +17,5 @@
                             </div>
                         
                     </form>
-                    <a href="/hospital/login/olvido">¿Olvidaste tu clave de acceso?</a><br>
+                    <a href="<?php print RUTA; ?>login/olvido">¿Olvidaste tu clave de acceso?</a><br>
 <?php include_once("piepagina.php"); ?>
