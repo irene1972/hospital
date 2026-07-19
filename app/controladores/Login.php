@@ -132,7 +132,8 @@ class Login extends Controlador
 					unset($data["clave"]);
 					$this->sesion=new Sesion();
 					$this->sesion->iniciarLogin($data);
-					Helper::mostrar($this->sesion->getUsuario());
+					//Helper::mostrar($this->sesion->getUsuario());
+					header("location:".RUTA."tablero");
 				} 
 			}
 			$this->mensaje(
