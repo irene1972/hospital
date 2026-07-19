@@ -25,12 +25,18 @@
                     $data=$this->modelo->buscarCorreo($correo);
                     if(!empty($data)){
                         if($this->enviarCorreo($data)){
-                            Helper::mostrar("Si existe en la base de datos");
+                            $this->mensaje(
+                                "Cambio de clave de acceso",
+                                "Cambio de clave de acceso",
+                                "Se ha enviado un correo a <b>".$data["correo"]."</b> para que puedas cambiar tu clave de acceso. Cualquier duda te puedes comunicar con nosotros. No olvides revisar tu bandaja de spam.",
+                                "login",
+                                "success"
+                            );
                         }else{
-                            Helper::mostrar("Error no existe en la base de datos");
+                            array_push($errores,"Error al enviar su correo, inténtelo más tarde.");
                         }
                     }else{
-                        Helper::mostrar("No existe en la base de datos");
+                        array_push($errores,"Haga el favor de verificar su correo");
                     }
                         
                 }
