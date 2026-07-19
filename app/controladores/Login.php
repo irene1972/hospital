@@ -10,6 +10,9 @@
             ];
             $this->vista("loginCaratulaVista",$datos);
         }
+        public function cambiarclave($cadena=''){
+            Helper::mostrar(Helper::desencriptar($cadena));
+        }
         public function olvido(){
             $errores=[];
             $data=[];

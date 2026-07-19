@@ -21,7 +21,7 @@
        public function enviarCorreo(array $data=[]){
         $salida=false;
         if(!empty($data)){
-            $id=1;    //Helper::encriptar($data['id']);
+            $id=Helper::encriptar($data['id']);
             $msg='Entra al siguiente enlace para cambiar tu clave de acceso al sistema de control dell hospital...<br>';
             $msg.="<a href='".RUTA."login/cambiarclave/".$id."'>Cambiar tu clave de acceso</a>";
 
@@ -31,8 +31,8 @@
             $headers.="Replay-to: ayuda@hospital.com\r\n";
 
             $asunto="Cambiar clave de acceso";
-            //Helper::mostrar($msg);
-            $salida=@mail($data["correo"],$asunto,$msg,$headers);
+            Helper::mostrar($msg);
+            //$salida=@mail($data["correo"],$asunto,$msg,$headers);
             }
             return $salida;
        }
