@@ -11,7 +11,30 @@
             $this->vista("loginCaratulaVista",$datos);
         }
         public function cambiarclave($cadena=''){
-            Helper::mostrar(Helper::desencriptar($cadena));
+            //Helper::mostrar(Helper::desencriptar($cadena));
+            $id = Helper::desencriptar($cadena);
+		$errores = [];
+		if ($_SERVER['REQUEST_METHOD']=="POST") {
+			$clave1 = trim($_POST['clave']??"");
+			$clave2 = trim($_POST['verifica']??"");
+			$id = trim($_POST['id']??"");
+			Helper::mostrar($_POST);
+		} else if ($id=="") {
+			$this->mensaje(
+			"Cambio de clave de acceso",
+			"Cambio de clave de acceso",
+			"Error al desencriptar. Favor de intentarlo más tarde.",
+			"login",
+			"danger");
+		} else {
+			$datos = [
+			"titulo" => "Cambiar contraseña",
+			"subtitulo" => "Cambiar contraseña",
+			"errores" => $errores,
+			"data" => $id
+			];
+			$this->vista("loginCambiarVista",$datos);
+		}
         }
         public function olvido(){
             $errores=[];
