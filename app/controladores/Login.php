@@ -12,6 +12,7 @@
         }
         public function olvido(){
             $errores=[];
+            $data=[];
             if($_SERVER['REQUEST_METHOD']=='POST'){
                 $correo=$_POST['usuario']??"";
                 if(empty($correo)){
@@ -21,8 +22,13 @@
                     array_push($errores,"El correo electrónico no está bien escrito.");
                 }
                 if(empty($errores)){
-                    if($this->modelo->buscarCorreo($correo)){
-                        Helper::mostrar("Si existe en la base de datos");
+                    $data=$this->modelo->buscarCorreo($correo);
+                    if(!empty($data)){
+                        if($this->enviarCorreo($data)){
+                            Helper::mostrar("Si existe en la base de datos");
+                        }else{
+                            Helper::mostrar("Error no existe en la base de datos");
+                        }
                     }else{
                         Helper::mostrar("No existe en la base de datos");
                     }
