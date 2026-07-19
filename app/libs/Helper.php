@@ -33,5 +33,26 @@
 		//
 		return openssl_decrypt($salida, $metodo, LLAVE, 0, $ivDecrypted);
 	}
+	
+	public static function validarClaveSegura(string $clave):bool{
+		$pattern='/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[+#?!$%^&*-]).{10,}$/';
+		if(preg_match($pattern,$clave)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+		
+/*
+	public static function validarClaveSegura(string $clave):bool {
+	    $pattern = '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[+#?!$%^&*-]).{10,}$/';
+	    
+	    if (preg_match($pattern, $clave)) {
+	        return true; 
+	    } else {
+	        return false; 
+	    }
+	}
+	*/
     }
 ?>

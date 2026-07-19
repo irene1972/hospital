@@ -13,4 +13,5 @@
 			<input type="hidden" name="id" id="id" value="<?php if(isset($datos["data"])) {print $datos["data"]; } else { print ""; } ?>">
 		</div>
 	</form>
+	<p>La clave de acceso debe tener al menos una letra mayúscula, una letra minúscula, un número, un símbolo o caracter especial (+#?!$%^&*-) y tener una longitud de 10 caracteres o más</p>
 <?php include_once("piepagina.php");?>

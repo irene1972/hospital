@@ -1,24 +1,63 @@
-<?php 
-    class Login extends Controlador{
-        function __construct(){
-            $this->modelo=$this->modelo("LoginModelo");
-        }
-        public function caratula(){
-            $datos=[
-                "titulo"=>"Entrada",
-                "subtitulo"=>"Hospital"
-            ];
-            $this->vista("loginCaratulaVista",$datos);
-        }
-        public function cambiarclave($cadena=''){
-            //Helper::mostrar(Helper::desencriptar($cadena));
-            $id = Helper::desencriptar($cadena);
+<?php  
+/**
+ * 
+ */
+class Login extends Controlador
+{
+	
+	function __construct()
+	{
+		$this->modelo = $this->modelo("LoginModelo");
+	}
+
+	public function caratula()
+	{
+		$datos = [
+			"titulo" => "Entrada",
+			"subtitulo" => "Hospital"
+		];
+		$this->vista("loginCaratulaVista",$datos);
+	}
+
+	public function cambiarclave($cadena='')
+	{
+		$id = Helper::desencriptar($cadena);
 		$errores = [];
 		if ($_SERVER['REQUEST_METHOD']=="POST") {
 			$clave1 = trim($_POST['clave']??"");
 			$clave2 = trim($_POST['verifica']??"");
 			$id = trim($_POST['id']??"");
-			Helper::mostrar($_POST);
+			//
+			if (empty($clave1)) {
+				array_push($errores, "La clave de acceso es requeria.");
+			}
+			if (empty($clave2)) {
+				array_push($errores, "La clave de verificación es requerida.");
+			}
+			if ($clave1!=$clave2) {
+				array_push($errores, "Las claves de acceso no coinciden.");
+			} else if(Helper::validarClaveSegura($clave1)==false){
+				array_push($errores, "La clave de acceso no es segura.");
+			}
+			if (empty($errores)) {
+				$clave = hash_hmac("sha512", $clave1, LLAVE);
+				$data = ["id"=>$id,"clave"=>$clave];
+				if ($this->modelo->actualizarClaveAcceso($data)) {
+					$this->mensaje(
+					"Cambio de clave de acceso",
+					"Cambio de clave de acceso",
+					"Cambio de la clave de acceso exitosa.",
+					"login",
+					"success");
+				} else {
+					$this->mensaje(
+					"Cambio de clave de acceso",
+					"Cambio de clave de acceso",
+					"Error al actualizar la clave de acceso.",
+					"login",
+					"danger");
+				}
+			}
 		} else if ($id=="") {
 			$this->mensaje(
 			"Cambio de clave de acceso",
@@ -26,53 +65,55 @@
 			"Error al desencriptar. Favor de intentarlo más tarde.",
 			"login",
 			"danger");
-		} else {
-			$datos = [
-			"titulo" => "Cambiar contraseña",
-			"subtitulo" => "Cambiar contraseña",
-			"errores" => $errores,
-			"data" => $id
-			];
-			$this->vista("loginCambiarVista",$datos);
+		} 
+		$datos = [
+		"titulo" => "Cambiar contraseña",
+		"subtitulo" => "Cambiar contraseña",
+		"errores" => $errores,
+		"data" => $id
+		];
+		$this->vista("loginCambiarVista",$datos);
+	}
+
+	public function olvido()
+	{
+		$errores = [];
+		$data = [];
+		if ($_SERVER['REQUEST_METHOD']=='POST') {
+			$correo = $_POST['usuario']??"";
+			if (empty($correo)) {
+				array_push($errores, "El correo electrónico es requerido.");
+			}
+			if (Helper::correo($correo)==false) {
+				array_push($errores, "El correo electrónico no está bien escrito.");
+			}
+			if (empty($errores)) {
+				$data = $this->modelo->buscarCorreo($correo);
+				if (!empty($data)) {
+					if ($this->enviarCorreo($data)) {
+						$this->mensaje(
+							"Cambio de clave de acceso",
+							"Cambio de clave de acceso",
+							"Se ha enviado un correo a <b>".$data["correo"]."</b> para que puedas cambiar tu clave de acceso. Cualquier duda te puedes comunicar con nosotros. No olvides revisar tu bandeja de spam.",
+							"login",
+							"success");
+					} else {
+						array_push($errores, "Error al enviar su correo, inténtelo más tarde.");
+					}
+				} else {
+					array_push($errores, "Favor de verificar su correo electrónico.");
+				}						
+			} 
 		}
-        }
-        public function olvido(){
-            $errores=[];
-            $data=[];
-            if($_SERVER['REQUEST_METHOD']=='POST'){
-                $correo=$_POST['usuario']??"";
-                if(empty($correo)){
-                    array_push($errores,"El correo electrónico es requerido.");
-                }
-                if(Helper::correo($correo)==false){
-                    array_push($errores,"El correo electrónico no está bien escrito.");
-                }
-                if(empty($errores)){
-                    $data=$this->modelo->buscarCorreo($correo);
-                    if(!empty($data)){
-                        if($this->enviarCorreo($data)){
-                            $this->mensaje(
-                                "Cambio de clave de acceso",
-                                "Cambio de clave de acceso",
-                                "Se ha enviado un correo a <b>".$data["correo"]."</b> para que puedas cambiar tu clave de acceso. Cualquier duda te puedes comunicar con nosotros. No olvides revisar tu bandaja de spam.",
-                                "login",
-                                "success"
-                            );
-                        }else{
-                            array_push($errores,"Error al enviar su correo, inténtelo más tarde.");
-                        }
-                    }else{
-                        array_push($errores,"Haga el favor de verificar su correo");
-                    }
-                        
-                }
-            }
-            $datos=[
-                "titulo"=>"Olvido clave de acceso",
-                "subtitulo"=>"Olvido clave de acceso",
-                "errores"=>$errores
-            ];
-            $this->vista("loginOlvidoVista",$datos);
-        }
-    }
+		$datos = [
+			"titulo" => "Olvido clave de acceso",
+			"subtitulo" => "Olvido clave de acceso",
+			"errores" => $errores
+		];
+		$this->vista("loginOlvidoVista",$datos);
+	}
+}
+
+
+
 ?>

@@ -27,5 +27,15 @@ class MySQLdb{
         }
         return [];
     }
+    public function queryNoSelect(string $sql,array $data=[]):bool
+	{
+		$salida = false;
+		if (empty($data)) {
+			if($this->conn->query($sql)) $salida = true;
+		} else {
+			if($this->conn->prepare($sql)->execute($data)) $salida = true;
+		}
+		return $salida;
+	}
 }
 ?>
