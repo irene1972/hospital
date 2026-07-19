@@ -33,8 +33,6 @@
                         Helper::mostrar("No existe en la base de datos");
                     }
                         
-                }else{
-                    Helper::mostrar($errores);
                 }
             }
             $datos=[
