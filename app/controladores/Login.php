@@ -4,7 +4,7 @@
  */
 class Login extends Controlador
 {
-	
+	private $sesion;
 	function __construct()
 	{
 		$this->modelo = $this->modelo("LoginModelo");
@@ -128,7 +128,11 @@ class Login extends Controlador
 				$clave = hash_hmac("sha512", $clave, LLAVE);
 				$data = $this->modelo->buscarCorreo($usuario);
 				if ($data && $data["clave"]==$clave) {
-					Helper::mostrar("Bienvenido al sistema de administración de un hospital.");
+					//Helper::mostrar("Bienvenido al sistema de administración de un hospital.");
+					unset($data["clave"]);
+					$this->sesion=new Sesion();
+					$this->sesion->iniciarLogin($data);
+					Helper::mostrar($this->sesion->getUsuario());
 				} 
 			}
 			$this->mensaje(
