@@ -18,5 +18,14 @@ class MySQLdb{
             die("no se pudo conectar: " . $e->getMessage());
         }
     }
+    public function query(string $sql=''){
+        if(empty($sql)) return null;
+        $stmt=$this->conn->query($sql);
+        $salida=$stmt->fetch(PDO::FETCH_ASSOC);
+        if($salida){
+            return $salida;
+        }
+        return [];
+    }
 }
 ?>

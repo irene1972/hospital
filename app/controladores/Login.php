@@ -21,15 +21,12 @@
                     array_push($errores,"El correo electrónico no está bien escrito.");
                 }
                 if(empty($errores)){
-                    Helper::mostrar($correo);
-                    /*
-                    $data=$this->modelo->buscarCorreo($correo);
-                    if(empty($data)){
-                        Helper::mostrar("No existe el correo");
+                    if($this->modelo->buscarCorreo($correo)){
+                        Helper::mostrar("Si existe en la base de datos");
                     }else{
-                        Helper::mostrar($correo);
+                        Helper::mostrar("No existe en la base de datos");
                     }
-                        */
+                        
                 }else{
                     Helper::mostrar($errores);
                 }
