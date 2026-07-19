@@ -112,6 +112,33 @@ class Login extends Controlador
 		];
 		$this->vista("loginOlvidoVista",$datos);
 	}
+	public function verificar(){
+		$errores=[];
+		if ($_SERVER["REQUEST_METHOD"]=="POST") {
+			$usuario=$_POST['usuario']??"";
+			$clave=$_POST['clave']??"";
+			//
+			if (empty($clave)) {
+				array_push($errores, "La clave de acceso es requerida.");
+			}
+			if (empty($usuario)) {
+				array_push($errores, "El usuario es requerido.");
+			}
+			if (count($errores)==0) {
+				$clave = hash_hmac("sha512", $clave, LLAVE);
+				$data = $this->modelo->buscarCorreo($usuario);
+				if ($data && $data["clave"]==$clave) {
+					Helper::mostrar("Bienvenido al sistema de administración de un hospital.");
+				} 
+			}
+			$this->mensaje(
+			"Sistema de un hospital",
+			"Sistema de un hospital",
+			"Existió un error al entrar al sistema. Haga el favor de intentarlo nuevamente.",
+			"login",
+			"danger");
+		}
+	}
 }
 
 
