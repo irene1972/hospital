@@ -10,6 +10,12 @@ class UsuariosModelo
 	{
 		$this->db = new MySQLdb();
 	}
+	public function getCorreo(string $correo=''):array | null
+	{
+		if(empty($correo)) return null;
+		$sql = "SELECT id FROM usuarios WHERE correo='".$correo."' AND baja=0";
+		return $this->db->query($sql);
+	}
 	public function getTabla(){
 		$sql = "SELECT u.id, CONCAT(u.apellidos,', ',u.nombres) as nombre, ";
 		$sql.= "tu.tipo, eu.estado ";

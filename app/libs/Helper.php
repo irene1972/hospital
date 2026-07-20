@@ -1,5 +1,13 @@
 <?php
     class Helper{
+		public static function cadena(string $cadena=''):string
+	{
+		$buscar  = array('^', 'delete', 'drop','truncate','exec','system');
+		$reemplazar = array('-', 'dele*te', 'dr*op','truneca*te','ex*ec','syst*em');
+		$cadena = trim(str_replace($buscar, $reemplazar, $cadena));
+		$cadena = addslashes(htmlentities($cadena));
+		return $cadena;
+	}
         public static function mostrar($data,$detener=false){
             print "<pre>";
             var_dump($data);
@@ -43,16 +51,15 @@
 		}
 	}
 		
-/*
-	public static function validarClaveSegura(string $clave):bool {
-	    $pattern = '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[+#?!$%^&*-]).{10,}$/';
-	    
-	    if (preg_match($pattern, $clave)) {
-	        return true; 
-	    } else {
-	        return false; 
-	    }
+	public static function generarClave(int $lon):string
+	{
+		$llave = "";
+		$cadena = "1234567890ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz+*-_";
+		$max = strlen($cadena)-1;
+		for($i = 0; $i < $lon; $i++){
+		  $llave .= substr($cadena, mt_rand(0,$max), 1);
+		}
+		return $llave;
 	}
-	*/
     }
 ?>
