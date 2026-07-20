@@ -19,6 +19,26 @@ class UsuariosModelo
 		$sql.= "u.tipoUsuario=tu.id";
 		return $this->db->querySelect($sql);
 	}
+	public function getTiposUsuarios():array
+	{
+		//
+		$sql = "SELECT id, tipo FROM tipoUsuario";
+		return $this->db->querySelect($sql);
+	}
+
+	public function getEstadosUsuarios():array
+	{
+		//
+		$sql = "SELECT id, estado FROM estadoUsuario";
+		return $this->db->querySelect($sql);
+	}
+
+	public function getGeneros():array
+	{
+		//
+		$sql = "SELECT id, genero FROM generos";
+		return $this->db->querySelect($sql);
+	}
 }
 
 
