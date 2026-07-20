@@ -9,7 +9,7 @@
                                 <input id="clave" type="password" name="clave" class="form-control" placeholder="Escribe tu clave de acceso" required value="<?php print isset($datos['data']['clave'])?$datos['data']['clave']:'';?>">
                             </div>
                             <div class="form-group text-start mt-2">
-                                <input type="checkbox" name="recordar">
+                                <input type="checkbox" name="recordar" <?php print isset($datos['data']['recordar'])?' checked':''; ?>>
                                 <label for="recordar">Recordar</label>
                             </div>
                             <div class="form-group text-start my-2">

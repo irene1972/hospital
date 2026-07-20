@@ -12,13 +12,15 @@ class Login extends Controlador
 
 	public function caratula()
 	{
+		$data=[];
 		if(isset($_COOKIE['datos'])){
 			$datos_array=explode("|",$_COOKIE['datos']);
 			$usuario=$datos_array[0];
 			$clave=Helper::desencriptar($datos_array[1]);
 			$data=[
 				"usuario"=>$usuario,
-				"clave"=>$clave
+				"clave"=>$clave,
+				"recordar"=>true
 			];
 		}
 		$datos = [
