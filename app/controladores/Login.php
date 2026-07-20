@@ -53,7 +53,7 @@ class Login extends Controlador
 			}
 			if (empty($errores)) {
 				$clave = hash_hmac("sha512", $clave1, LLAVE);
-				$data = ["id"=>$id,"clave"=>$clave];
+				$data = ["id"=>$id,"clave"=>$clave,"estadoUsuario"=>ACTIVO];
 				if ($this->modelo->actualizarClaveAcceso($data)) {
 					$this->mensaje(
 					"Cambio de clave de acceso",

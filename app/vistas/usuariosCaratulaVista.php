@@ -13,14 +13,19 @@
 		  </thead>
 		  <tbody>
 		  	<?php
-		  	for($i=0; $i<count($datos["data"][0]); $i++){
+			/*
+			print '<pre>';
+			print_r($datos["data"]);
+			print '</pre>';
+			*/
+		  	for($i=0; $i<count($datos["data"]); $i++){
 		  		print "<tr>";
-		  		print "<td class='text-start'>".$datos["data"][0][$i]['id']."</td>";
-		  		print "<td class='text-start'>".$datos["data"][0][$i]['nombre']."</td>";
-		      	print "<td class='text-start'>".$datos["data"][0][$i]['tipo']."</td>";
-		      	print "<td class='text-start'>".$datos["data"][0][$i]['estado']."</td>";
-		      	print "<td><a href='".RUTA."usuarios/modificar/".$datos["data"][0][$i]["id"]."' class='btn btn-info'>Modificar</a></td>";
-		      	print "<td><a href='".RUTA."usuarios/borrar/".$datos["data"][0][$i]["id"]."' class='btn btn-danger'>Borrar</a></td>";
+		  		print "<td class='text-start'>".$datos["data"][$i]['id']."</td>";
+		  		print "<td class='text-start'>".$datos["data"][$i]['nombre']."</td>";
+		      	print "<td class='text-start'>".$datos["data"][$i]['tipo']."</td>";
+		      	print "<td class='text-start'>".$datos["data"][$i]['estado']."</td>";
+		      	print "<td><a href='".RUTA."usuarios/modificar/".$datos["data"][$i]["id"]."' class='btn btn-info'>Modificar</a></td>";
+		      	print "<td><a href='".RUTA."usuarios/borrar/".$datos["data"][$i]["id"]."' class='btn btn-danger'>Borrar</a></td>";
 		  		print "</tr>";
 		  	}
 		  	?>

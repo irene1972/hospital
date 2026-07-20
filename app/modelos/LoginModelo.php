@@ -14,7 +14,7 @@ class LoginModelo
 	public function actualizarClaveAcceso(array $data=[]):bool
 	{
 		if (empty($data)) return null;
-		$sql = "UPDATE usuarios SET clave=:clave WHERE id=:id";
+		$sql = "UPDATE usuarios SET clave=:clave, estadoUsuario=:estadoUsuario WHERE id=:id";
 		return $this->db->queryNoSelect($sql,$data);
 	}
 

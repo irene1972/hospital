@@ -69,7 +69,41 @@ class Usuarios extends Controlador
 				"clave"=>Helper::generarClave(10),
 				"genero"=>$genero
 			];
-			Helper::mostrar($data);
+			if(trim($id)===""){
+				//Alta
+				$data["estadoUsuario"]=INACTIVO;
+				$id = $this->modelo->alta($data);
+				if ($id>0) {
+					$data["id"] = $id;
+					if ($this->enviarCorreo($data)) {
+						$this->mensaje(
+						"Alta de un usuario", 
+						"Alta de un usuario", 
+						"Se añadió correctamente el usuario: ".$nombres." ".$apellidos, 
+						"usuarios/".$pagina, 
+						"success"
+						);
+					} else {
+						$this->mensaje(
+						"Error al enviar el correo al usuario.", 
+						"Error al enviar el correo al usuario.", 
+						"Error al enviar el correo al usuario: ".$nombres." ".$apellidos, 
+						"usuarios/".$pagina,
+						"danger"
+						);
+					}
+				} else {
+					$this->mensaje(
+						"Error al insertar el usuario.", 
+						"Error al insertar el  usuario.", 
+						"Error al insertar el  usuario: ".$nombres." ".$apellidos, 
+						"usuarios/".$pagina,
+						"danger"
+						);
+				}
+			} else {
+				//Modificación
+			}
 	    }
 		$tiposUsuarios = $this->modelo->getTiposUsuarios();
     	$generos = $this->modelo->getGeneros();
