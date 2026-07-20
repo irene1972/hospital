@@ -9,7 +9,6 @@ class Login extends Controlador
 	{
 		$this->modelo = $this->modelo("LoginModelo");
 	}
-
 	public function caratula()
 	{
 		$data=[];
