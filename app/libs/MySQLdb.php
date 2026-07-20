@@ -27,6 +27,20 @@ class MySQLdb{
         }
         return [];
     }
+    public function querySelect(string $sql=''):array | null
+	{
+		if (empty($sql)) return null;
+		$data = [];
+		$stmt = $this->conn->query($sql);
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		do {
+	       array_push($data,$row);
+	   } while ($row = $stmt->fetch(PDO::FETCH_ASSOC));
+	   if (!$data[0]) {
+		 $data = [];
+	   }
+	   return $data;
+	}
     public function queryNoSelect(string $sql,array $data=[]):bool
 	{
 		$salida = false;

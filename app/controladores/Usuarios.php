@@ -21,13 +21,15 @@ class Usuarios extends Controlador
 
 	public function caratula()
 	{
+		$data=$this->modelo->getTabla();
+		$errores=[];
 		$datos = [
 			"titulo" => "Usuarios",
 			"subtitulo" => "Usuarios",
 			"usuario"=>$this->usuario,
 			"activo"=>"usuarios",
-			"data"=>[],
-			"errores" =>[],
+			"data"=>[$data],
+			"errores" =>$errores,
 			"menu" => true
 		];
 		$this->vista("usuariosCaratulaVista",$datos);
