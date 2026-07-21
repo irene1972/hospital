@@ -34,10 +34,23 @@ class UsuariosModelo
 		}
 		return $salida;
 	}
+	public function bajaLogica(string $id):bool
+	{
+		$sql = "UPDATE usuarios SET baja=1, baja_dt=(NOW()) WHERE id=".$id;
+		return $this->db->queryNoSelect($sql);
+	}
 	public function getCorreo(string $correo=''):array | null
 	{
 		if(empty($correo)) return null;
 		$sql = "SELECT id FROM usuarios WHERE correo='".$correo."' AND baja=0";
+		return $this->db->query($sql);
+	}
+	public function getId(string $id=''):array
+	{
+		if(empty($id)) return null;
+		$sql = "SELECT id, tipoUsuario, nombres, apellidos, telefono, ";
+		$sql.= "correo, clave, genero, estadoUsuario FROM usuarios ";
+		$sql.= "WHERE id='".$id."' AND baja=0";
 		return $this->db->query($sql);
 	}
 	public function getTabla(){

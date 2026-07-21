@@ -2,7 +2,7 @@
 class MySQLdb{
     private $host="localhost";
     private $usuario="root";
-    private $clave="root";
+    private $clave="";
     private $db="hospital";
     private $puerto="";
     private $conn;

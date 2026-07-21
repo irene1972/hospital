@@ -123,7 +123,52 @@ class Usuarios extends Controlador
 	    ];
 	    $this->vista("usuariosAltaVista",$datos);
 	}
-
+	public function borrar(string $id="",string $pagina="1"):void 
+	{
+		//Leemos los datos del registro del id
+		$data = $this->modelo->getId($id);
+		$tiposUsuarios = $this->modelo->getTiposUsuarios();
+    	$generos = $this->modelo->getGeneros();
+    	$estadosUsuarios = $this->modelo->getEstadosUsuarios();
+		$datos = [
+		  "titulo" => "Baja de un usuario",
+		  "subtitulo" => "Baja de un usuario",
+		  "menu" => true,
+		  "admon" => true,
+		  "usuario" => $this->usuario,
+		  "errores" => [],
+		  "activo" => 'usuarios',
+		  "data" => $data,
+		  "pagina" => $pagina,
+		  "tiposUsuarios" => $tiposUsuarios,
+		  "estadosUsuarios" => $estadosUsuarios,
+		  "generos" => $generos,
+		  "baja" => true
+		];
+		$this->vista("usuariosAltaVista",$datos);
+	}
+	public function bajaLogica(string $id='',string $pagina="1"):void
+	{
+		if (isset($id) && $id!="") {
+			if ($this->modelo->bajaLogica($id)) {
+				$this->mensaje(
+					"Baja de un usuario", 
+					"Baja de un usuario", 
+					"Se borró correctamente al usuario: ".$id, 
+					"usuarios/".$pagina, 
+					"success"
+				);
+	        } else {
+	        	$this->mensaje(
+	        		"Baja de un usuario", 
+	        		"Baja de un usuario", 
+	        		"Error al borrar al usuario: ".$id, 
+	        		"usuarios/".$pagina,
+	        		"danger"
+	        	);
+	        }
+	   	}
+	}
 	public function caratula()
 	{
 		$data = $this->modelo->getTabla();

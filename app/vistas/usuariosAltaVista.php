@@ -73,8 +73,15 @@
 	</div>
 
 	<div class="form-group text-start mt-3">
-	<input type="submit" value="Enviar" class="btn btn-success">
-	<a href="<?php print RUTA; ?>usuarios" class="btn btn-success">Regresar</a>
+		<input type="hidden" name="id" id="id" value="<?php if (isset($datos['data']['id'])) { print $datos['data']['id']; } else { print ""; } ?>">
+	<?php if (isset($datos["baja"])) { ?>
+		<a href="<?php print RUTA; ?>usuarios/bajaLogica/<?php print $datos['data']['id']."/".$datos["pagina"]; ?>" class="btn btn-danger">Borrar</a>
+		<a href="<?php print RUTA.'usuarios/'.$datos['pagina']; ?>" class="btn btn-danger">Regresar</a>
+		<p><b>Advertencia: una vez borrado el registro, no podrá recuperar la información.</b></p>
+	<?php } else { ?>
+		<input type="submit" value="Enviar" class="btn btn-success">
+		<a href="<?php print RUTA; ?>usuarios" class="btn btn-success">Regresar</a>
+	<?php } ?>
 	</div>
 
 

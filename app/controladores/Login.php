@@ -5,27 +5,29 @@
 class Login extends Controlador
 {
 	private $sesion;
+	
 	function __construct()
 	{
 		$this->modelo = $this->modelo("LoginModelo");
 	}
+
 	public function caratula()
 	{
-		$data=[];
-		if(isset($_COOKIE['datos'])){
-			$datos_array=explode("|",$_COOKIE['datos']);
-			$usuario=$datos_array[0];
-			$clave=Helper::desencriptar($datos_array[1]);
-			$data=[
-				"usuario"=>$usuario,
-				"clave"=>$clave,
-				"recordar"=>true
+		$data = [];
+		if (isset($_COOKIE['datos'])) {
+			$datos_array = explode("|",$_COOKIE['datos']);
+			$usuario = $datos_array[0];
+			$clave = Helper::desencriptar($datos_array[1]);
+			$data = [
+				"usuario" => $usuario,
+				"clave" => $clave,
+				"recordar" => true
 			];
-		}
+		} 
 		$datos = [
 			"titulo" => "Entrada",
 			"subtitulo" => "Hospital",
-			"data"=>$data
+			"data" => $data,
 		];
 		$this->vista("loginCaratulaVista",$datos);
 	}
@@ -52,7 +54,7 @@ class Login extends Controlador
 			}
 			if (empty($errores)) {
 				$clave = hash_hmac("sha512", $clave1, LLAVE);
-				$data = ["id"=>$id,"clave"=>$clave,"estadoUsuario"=>ACTIVO];
+				$data = ["id"=>$id,"clave"=>$clave, "estadoUsuario"=>ACTIVO];
 				if ($this->modelo->actualizarClaveAcceso($data)) {
 					$this->mensaje(
 					"Cambio de clave de acceso",
@@ -123,18 +125,21 @@ class Login extends Controlador
 		];
 		$this->vista("loginOlvidoVista",$datos);
 	}
-	public function verificar(){
+
+	public function verificar():void
+	{
 		$errores=[];
 		if ($_SERVER["REQUEST_METHOD"]=="POST") {
 			$usuario=$_POST['usuario']??"";
 			$clave=$_POST['clave']??"";
-			$recordar=isset($_POST['recordar'])?"on":"off";
-			$valor=$usuario."|".Helper::encriptar($clave);
+			$recordar = isset($_POST['recordar'])?"on":"off";
+			//Recordar
+			$valor = $usuario."|".Helper::encriptar($clave);
 			//
-			if($recordar=="on"){
-				$fecha=time()+(60*60*24*7);
-			}else{
-				$fecha=time()-1;
+			if ($recordar=="on") {
+				$fecha = time()+(60*60*24*7);
+			} else {
+				$fecha = time()-1;
 			}
 			setcookie("datos",$valor,$fecha,RUTA);
 			//
@@ -145,21 +150,33 @@ class Login extends Controlador
 				array_push($errores, "El usuario es requerido.");
 			}
 			if (count($errores)==0) {
-				$clave = hash_hmac("sha512", $clave, LLAVE);
 				$data = $this->modelo->buscarCorreo($usuario);
-				if ($data && $data["clave"]==$clave) {
-					//Helper::mostrar("Bienvenido al sistema de administración de un hospital.");
-					unset($data["clave"]);
-					$this->sesion=new Sesion();
-					$this->sesion->iniciarLogin($data);
-					//Helper::mostrar($this->sesion->getUsuario());
-					header("location:".RUTA."tablero");
-				} 
+				if ($data["estadoUsuario"]==ACTIVO) {
+					$clave = hash_hmac("sha512", $clave, LLAVE);
+					if ($data && $data["clave"]==$clave) {
+						unset($data["clave"]);
+						$this->sesion = new Sesion();
+						$this->sesion->iniciarLogin($data);
+						$this->modelo->actualizarLogin($data["id"]);
+						if ($data["tipoUsuario"]==ADMON) {
+							header("location:".RUTA."tablero");
+						} else if ($data["tipoUsuario"]==OPERADOR) {
+							Helper::mostrar("Tablero operador");
+						}
+					} 
+				} else {
+					$this->mensaje(
+						"Sistema de un hospital",
+						"Sistema de un hospital",
+						"Tu usuario no está ACTIVO. Favor de comunicarse con el administrador.",
+						"login",
+						"danger");
+				}
 			}
 			$this->mensaje(
 			"Sistema de un hospital",
 			"Sistema de un hospital",
-			"Existió un error al entrar al sistema. Haga el favor de intentarlo nuevamente.",
+			"Existió un error al entrar al sistema. Favor de intentarlo nuevamente.",
 			"login",
 			"danger");
 		}
